@@ -36,7 +36,7 @@ class Hangman
 end
 
 guesser = ComputerPlayer.new
-checker = HumanPlayer.new
+checker = ComputerPlayer.new
 
 game = Hangman.new(guesser, checker)
 game.run

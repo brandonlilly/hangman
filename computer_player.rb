@@ -8,10 +8,9 @@ class ComputerPlayer
   end
 
   def guess(phrase)
-    guess = intelligent_guess(phrase)
-    @guessed << guess
-    puts guess
-    guess
+    limit_possibilities(phrase)
+    return make_guess(@possibilities.pop) if @possibilities.count < 3
+    make_guess(frequent_letter)
   end
 
   def pick_secret_word
@@ -29,25 +28,27 @@ class ComputerPlayer
 
   private
 
-  def random_guess(phrase)
-    (alphabet - @guessed).sample
-  end
-
-  def intelligent_guess(phrase)
+  def limit_possibilities(phrase)
     @possibilities.select! do |word|
-      next false if word.size != phrase.size
-      next false if @guessed.any? { |letter| word.include?(letter) && !phrase.include?(letter) }
-      next false if word.chars.each_with_index.any? do |char, index|
+      next if word.size != phrase.size
+      next if @guessed.any? { |letter| word.include?(letter) && !phrase.include?(letter) }
+      next if word.chars.each_with_index.any? do |char, index|
         phrase[index] != nil && phrase[index] != char
       end
       true
     end
+  end
 
-    return @possibilities.pop if @possibilities.count < 3
-
-    (alphabet - @guessed).max_by do
-      |letter| @possibilities.join.count(letter)
+  def frequent_letter
+    (alphabet - @guessed).max_by do |letter|
+      @possibilities.join.count(letter)
     end
+  end
+
+  def make_guess(guess)
+    @guessed << guess
+    puts guess
+    guess
   end
 
   def alphabet
