@@ -39,9 +39,9 @@ class ComputerPlayer
       true
     end
 
-    (alphabet - @guessed).sort_by do
+    (alphabet - @guessed).max_by do
       |letter| @possibilities.join.count(letter)
-    end.last
+    end
   end
 
   def alphabet
