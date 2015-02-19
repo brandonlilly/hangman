@@ -13,9 +13,13 @@ class Hangman
     @phrase = Array.new(length)
     until @phrase.none?(&:nil?)
       puts "Secret word: #{render}"
-      letter = @guesser.guess_letter(@phrase).downcase
-      positions = @checker.check_letter(letter)
-      update_phrase(positions, letter) unless positions.nil?
+      guess = @guesser.guess(@phrase).downcase
+      if guess.length == 1
+        positions = @checker.check_letter(guess)
+        update_phrase(positions, guess) unless positions.nil?
+      else
+        @phrase = guess.split('') if @checker.check_word(guess)
+      end
     end
     puts "\nYou got it. The word was '#{render}'!"
   end
@@ -32,7 +36,7 @@ class Hangman
 end
 
 guesser = ComputerPlayer.new
-checker = ComputerPlayer.new
+checker = HumanPlayer.new
 
 game = Hangman.new(guesser, checker)
 game.run

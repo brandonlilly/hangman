@@ -7,7 +7,7 @@ class ComputerPlayer
     @guessed = []
   end
 
-  def guess_letter(phrase)
+  def guess(phrase)
     guess = intelligent_guess(phrase)
     @guessed << guess
     puts guess
@@ -21,6 +21,10 @@ class ComputerPlayer
 
   def check_letter(letter)
     @secret_phrase.chars.each_index.select { |i| @secret_phrase[i] == letter}
+  end
+
+  def check_word(word)
+    @secret_phrase.downcase == word.downcase
   end
 
   private
@@ -38,6 +42,8 @@ class ComputerPlayer
       end
       true
     end
+
+    return @possibilities.pop if @possibilities.count < 3
 
     (alphabet - @guessed).max_by do
       |letter| @possibilities.join.count(letter)

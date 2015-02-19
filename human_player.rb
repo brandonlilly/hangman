@@ -9,11 +9,11 @@ class HumanPlayer
     end
   end
 
-  def guess_letter(phrase)
+  def guess(phrase)
     print "> "
     loop do
-      input = gets.chomp
-      return input[/[A-z]/].downcase if input[/[A-z]/]
+      input = gets.chomp.downcase
+      return input[/[A-z]+/] if input[/[A-z]+/]
       puts "Invalid input #{input}, please enter a letter"
     end
   end
@@ -22,6 +22,11 @@ class HumanPlayer
     puts "Is that letter in your word? (type indexes if so and nothing otherwise)"
     input = gets.chomp
     input.scan(/\d+/).map(&:to_i)
+  end
+
+  def check_word(word)
+    puts "Is that the correct word? (y/n)"
+    gets.chomp.downcase == 'y'
   end
 
 end
